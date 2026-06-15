@@ -95,6 +95,7 @@ Rules:
 | Method | Path | Purpose |
 |--------|------|---------|
 | `GET` | `/api/assets` | List assets |
+| `GET` | `/api/active-deals` | Active deal summaries for the first operational screen |
 | `POST` | `/api/assets` | Create asset |
 | `GET` | `/api/assets/:assetId` | Asset detail with redaction based on permissions |
 | `PATCH` | `/api/assets/:assetId` | Update asset |
@@ -114,6 +115,67 @@ type CreateAssetRequest = {
   metadata: Record<string, unknown>;
 };
 ```
+
+### ActiveDealSummary response
+
+`GET /api/active-deals` returns a composed read model for the first authenticated operational screen. The backend owns redaction of `disclosingPartner` and any origin metadata before the payload reaches the frontend.
+
+```ts
+type ActiveDealSummary = {
+  asset: {
+    id: string;
+    code?: string;
+    description?: string;
+    type: "CREDIT_RIGHT" | "PRECATORY" | "ICMS_EXPORT" | "IPI_CREDIT" | "OTHER";
+    grossValue: number;
+    createdAt: string;
+    capacity: {
+      total: number;
+      allocated: number;
+      remaining: number;
+      unit: "BRL" | "PERCENTAGE";
+    };
+    disclosingPartner?: {
+      id: string;
+      name: string;
+    } | null;
+    restrictedFieldsRedacted: boolean;
+  };
+  commercialSummary?: {
+    desagioRate?: number;
+    netValue?: number;
+    validUntil?: string;
+  };
+  commissionSummary?: {
+    status: "PROPOSED" | "AGREED";
+    lineCount: number;
+  };
+  prospecting: {
+    contacted: Array<{
+      partnerId: string;
+      partnerName: string;
+      status: "PROSPECTED" | "INTERESTED" | "NO_RESPONSE" | "CONVERTED";
+      sentAt?: string;
+      channel?: "WHATSAPP" | "PHONE" | "EMAIL" | "MEETING" | "OTHER";
+    }>;
+    recommendations: Array<{
+      partnerId: string;
+      partnerName: string;
+      prospectingScore: number;
+      prospectRankTier: "PREFERRED" | "RECOMMENDED" | "NEUTRAL" | "LOW_PRIORITY";
+    }>;
+  };
+};
+```
+
+Rules:
+
+- Only include assets with `status = ACTIVE`.
+- Sort by `createdAt` descending by default.
+- Preserve backend RBAC redaction for confidential asset origin and disclosing partner fields.
+- `commercialSummary` and `commissionSummary` should reflect the most relevant active negotiation for the asset, prioritizing later lifecycle states over drafts.
+- `prospecting.contacted` should be derived from outreach, interest, and negotiation conversion state.
+- `prospecting.recommendations` should exclude already prospected partners unless the frontend explicitly asks for full recommendation context later.
 
 ## 7) Prospecting and interest
 
