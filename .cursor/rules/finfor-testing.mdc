@@ -1,0 +1,24 @@
+---
+description: finfor test layers, naming, and CI alignment
+globs: "**/tests/**,**/*.spec.ts,**/*.test.ts"
+alwaysApply: false
+---
+
+# Testing rules
+
+Read `spec/07-monorepo-testing-strategy.md` before adding or changing tests.
+
+## Before writing tests
+
+State: target layer (unit | integration | component | contract | e2e), and what is mocked vs real.
+
+## Conventions
+
+- Prefer `*.spec.ts`; Vitest; AAA structure.
+- Mock external IO in unit tests; do not mock the business rules under test.
+- Backend integration: Fastify injection preferred.
+- Folders: `tests/unit`, `integration`, `contract`, `component`, `e2e` per app.
+
+## CI order
+
+Typecheck → unit → backend integration + frontend component (see `.github/workflows/ci.yml`).

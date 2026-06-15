@@ -1,0 +1,7 @@
+node_modules/
+apps/*/node_modules/
+apps/frontend/.expo/
+apps/frontend/dist/
+apps/backend/dist/
+apps/backend/node_modules/
+.env

@@ -1,0 +1,25 @@
+---
+description: finfor backend — architecture and layering
+globs: apps/backend/**
+alwaysApply: false
+---
+
+# Backend rules
+
+Before planning or implementing backend work, read:
+- `spec/00-shared-architecture-directives.md`
+- `spec/05-backend-architecture-directives.md`
+
+## Layering (strict)
+
+Entry (routes/controllers) → Service → Repository. No controller → repository shortcuts. No HTTP objects in service/repository layers.
+
+## Defaults
+
+- Node.js 24, native ESM, Zod at boundaries, Vitest for tests.
+- Validate env at startup; never hardcode secrets.
+- Prefer Fastify injection for integration tests.
+
+## Tests
+
+Follow `spec/07-monorepo-testing-strategy.md`. State layer (unit/integration/contract) and what is mocked.

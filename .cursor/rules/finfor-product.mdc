@@ -1,0 +1,30 @@
+---
+description: finfor product scope, journeys, and domain modeling
+globs: spec/08-product-requirements.md,spec/**/*
+alwaysApply: false
+---
+
+# Product rules
+
+`spec/prd.md` and `spec/08-product-requirements.md` define **what** finfor delivers; `spec/09`–`13` define **domain rules**; `spec/14`–`18` define implementation-facing product artifacts; specs `00`–`07` define **how**.
+
+## When this applies
+
+- New features, user journeys, API surface, or domain entities
+- Scope, persona, or acceptance-criteria changes
+
+## Required actions
+
+1. Read `spec/prd.md` and `spec/08-product-requirements.md` before product-facing work.
+2. Read `spec/09-domain-model.md` and `spec/10-deal-state-machine.md` for negotiations, assets, allocation, commissions, NCDA.
+3. Read `spec/11-permissions-matrix.md` for roles and confidential fields.
+4. Read `spec/13-prospecting-and-partner-ranking.md` for prospecting recommendations or partner scoring.
+5. Read `spec/14-ui-routes-copy-and-combos.md` before implementing UI labels, combos, validation messages, or routes.
+6. Read `spec/15-api-contract-draft.md` before backend/frontend integration work.
+7. Read `spec/16-mvp-backlog-and-acceptance.md` for MVP story acceptance.
+8. Update the relevant spec when scope, journeys, or domain rules change (same PR or spec-first PR).
+9. Map screens to `spec/03-page-layout-guidelines.md` patterns.
+10. Tie discovery checklist items in `spec/README.md` to filled sections in `08`.
+11. Keep UI labels/copy in Portuguese; keep code identifiers and comments in English.
+
+Do not implement product behavior that contradicts an agreed product/domain spec without updating the spec first.

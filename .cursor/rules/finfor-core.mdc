@@ -1,0 +1,37 @@
+---
+description: finfor monorepo — spec source of truth and task routing
+alwaysApply: true
+---
+
+# finfor core agent rules
+
+Treat `/spec` as the source of truth. Index: `spec/README.md`. Specs win over ad-hoc ideas — update the spec first when requirements change.
+
+## Monorepo
+
+| Workspace | Stack |
+|-----------|-------|
+| `apps/backend` | Node.js 24, Fastify API |
+| `apps/frontend` | React 19.2.3, Expo SDK 56 |
+| `spec/` | Engineering, UX, product guidelines |
+
+## Mandatory reading by task
+
+| Task | Read |
+|------|------|
+| Architecture (shared) | `spec/00-shared-architecture-directives.md` |
+| Backend | `spec/05-backend-architecture-directives.md` |
+| Frontend | `spec/06-frontend-architecture-directives.md` |
+| Testing | `spec/07-monorepo-testing-strategy.md` |
+| UI / layout / styling | `01` → `02` → `03-page-layout-guidelines.md` → `04-ai-aesthetic-guardrails.md` |
+| Product / domain / journeys | `spec/prd.md`, `08`–`18` (update when scope, UI copy, API contracts, or domain rules change) |
+
+## Policies
+
+- Do not break the content-first visual direction in specs `01`–`04`.
+- For UI work: state which specs were applied and any deviation.
+- If aesthetics conflict with engineering, propose alternatives before a degraded fallback.
+
+## CI (PRs must pass)
+
+Typecheck → unit tests → backend integration → frontend component (`.github/workflows/ci.yml`).

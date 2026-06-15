@@ -1,0 +1,27 @@
+---
+description: finfor frontend — Expo architecture and data flow
+globs: apps/frontend/**
+alwaysApply: false
+---
+
+# Frontend rules
+
+Before planning or implementing frontend work, read:
+- `spec/00-shared-architecture-directives.md`
+- `spec/06-frontend-architecture-directives.md`
+
+## Stack
+
+React 19.2.3, Expo SDK 56, Expo Router v4+, TypeScript.
+
+## Layering
+
+Presentation (`app/`, components) → Domain (hooks, providers) → Data (api, cache, storage). No network logic in presentational components. Tokens only via `expo-secure-store`.
+
+## React 19
+
+Prefer actions: `useActionState`, `useFormStatus`, `useOptimistic`. Use TanStack Query for server state where appropriate.
+
+## Tests
+
+Follow `spec/07-monorepo-testing-strategy.md` (unit / component / e2e).

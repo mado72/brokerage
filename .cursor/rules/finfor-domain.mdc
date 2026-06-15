@@ -1,0 +1,45 @@
+---
+description: finfor domain model, negotiation state machine, allocation, and commissions
+globs: spec/09-domain-model.md,spec/10-deal-state-machine.md,spec/11-permissions-matrix.md,spec/12-glossary.md,spec/13-prospecting-and-partner-ranking.md,spec/14-ui-routes-copy-and-combos.md,spec/15-api-contract-draft.md,apps/backend/**/domain/**,apps/backend/**/negotiation/**,apps/backend/**/asset/**,apps/frontend/**/asset/**,apps/frontend/**/negotiation/**
+alwaysApply: false
+---
+
+# Domain rules
+
+Canonical domain specs:
+
+- `spec/09-domain-model.md` — entities, enums, calculations (BR-*)
+- `spec/10-deal-state-machine.md` — states, transitions, allocation side effects
+- `spec/11-permissions-matrix.md` — RBAC and confidentiality
+- `spec/12-glossary.md` — PT ↔ EN terminology
+- `spec/13-prospecting-and-partner-ranking.md` — partner scoring for prospecting
+- `spec/14-ui-routes-copy-and-combos.md` — Portuguese UI copy and dropdowns
+- `spec/15-api-contract-draft.md` — initial API contracts
+
+## Before implementing
+
+1. Identify affected entities and BR-* rules in `09`.
+2. Identify state transitions and allocation effects in `10`.
+3. Validate role permissions and restricted fields in `11`.
+4. Use glossary terms consistently in code (EN) and UI copy (pt-BR).
+
+## Non-negotiable domain rules
+
+- Parallel negotiations per asset with partial allocation (BRL or %).
+- Block new negotiations when `remainingCapacity = 0`.
+- Reserve allocation at `COMMERCIAL_PROPOSAL`.
+- `desagioRate` applies to **gross** asset value.
+- Commission is **always split** (office + partners); AGREED requires Manager.
+- `officeRole` change requires a **new negotiation**.
+- Restricted fields: asset origin and disclosing partner (see `11` §4).
+- Cancellation allowed only before formalization completes (through `CONDITIONS_ACCEPTANCE`); requires `cancellationReasonCategory` + `cancellationReason` (BR-28–30).
+- Partner prospecting ranked by composite score: history 35%, trust 25%, commercial 40% (BR-31–35).
+- UI labels, dropdowns, validation messages, and visible text are in Portuguese.
+- Code identifiers and comments are in English.
+
+## Implementation layering
+
+- State transition validation and capacity checks belong in the **domain/service layer** (`spec/05`).
+- Unit tests for every transition and capacity edge case are **mandatory** (`spec/07`).
+
+Do not bypass domain rules in controllers or UI-only checks.

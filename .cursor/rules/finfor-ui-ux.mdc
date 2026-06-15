@@ -1,0 +1,23 @@
+---
+description: finfor UI — visual direction and layout patterns
+globs: apps/frontend/**/*.{tsx,scss},apps/frontend/theme/**
+alwaysApply: false
+---
+
+# UI / UX rules
+
+Read before any visual or screen work (in order):
+
+1. `spec/01-visual-direction.md`
+2. `spec/02-design-system-rules.md`
+3. `spec/03-page-layout-guidelines.md`
+4. `spec/04-ai-aesthetic-guardrails.md` — pass the aesthetic QA checklist
+
+## Non-negotiable
+
+- Content-first hierarchy; subtle chrome.
+- Neutral warm palette (`apps/frontend/theme/colors.ts` aligns with spec).
+- No generic SaaS patterns or loud accent CTAs by default.
+- Map screens to layout patterns in `03` (Landing, List, Detail, Form, etc.).
+
+Document which specs were applied and any deviation in the change description.

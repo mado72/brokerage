@@ -1,0 +1,20 @@
+@import "./variables";
+
+:root {
+  --color-bg-warm-white: #{$color-bg-warm-white};
+  --color-bg-parchment: #{$color-bg-parchment};
+  --color-bg-stone-light: #{$color-bg-stone-light};
+
+  --color-text-charcoal: #{$color-text-charcoal};
+  --color-text-muted-brown: #{$color-text-muted-brown};
+
+  --color-accent-sand: #{$color-accent-sand};
+  --color-accent-beige: #{$color-accent-beige};
+
+  --color-border-soft: #{$color-border-soft};
+  --color-surface: #{$color-surface};
+  --color-surface-alt: #{$color-surface-alt};
+
+  --color-success-soft: #{$color-success-soft};
+  --color-error-soft: #{$color-error-soft};
+}

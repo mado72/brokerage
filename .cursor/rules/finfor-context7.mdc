@@ -1,0 +1,17 @@
+---
+description: Use Context7 for external library and framework docs
+alwaysApply: true
+---
+
+# Context7 (required for third-party code)
+
+When a task involves external libraries, frameworks, APIs, or setup:
+
+1. Resolve library ID via Context7 (`resolve-library-id`).
+2. Fetch current docs (`get-library-docs`) before proposing code.
+3. Prefer official, version-specific docs when a version is known.
+4. Do not guess APIs — base decisions on fetched documentation.
+
+Applies to `apps/backend` and `apps/frontend` dependency work.
+
+Expo: also read https://docs.expo.dev/versions/v56.0.0/ before frontend changes.
