@@ -45,6 +45,7 @@ Agents are operational roles. They do not need to be separate processes unless u
 | `finfor-frontend-agent` | Expo routes, screens, forms, UI copy | `01`-`04`, `06`, `14`, `15` |
 | `finfor-test-agent` | Unit, integration, component, state-machine coverage | `07`, `09`, `10`, `16` |
 | `finfor-review-agent` | Reviews PRs for spec compliance and regressions | All changed-area specs |
+| `finfor-product-artifacts-committer` | Splits task commits between product specs and implementation branches | `README`, `17`, changed-area specs |
 
 ## 4) Recommended skills
 
@@ -145,6 +146,26 @@ Checklist:
 - Keep domain logic in services.
 - Keep UI copy in Portuguese, code identifiers in English.
 
+### `product-artifacts-committer`
+
+Use when preparing commits for task work that may include both specs and implementation files.
+
+Mandatory reads:
+
+- `spec/README.md`
+- `spec/17-ai-agents-skills-and-specs.md`
+- Changed-area specs identified in the task
+
+Checklist:
+
+- Identify created, modified, deleted, and renamed files under `spec/**`.
+- Store only `spec/**` changes on `cursor/product-artifacts`.
+- Store code, implementation, tests, package changes, generated code, and app configuration on the implementation branch selected by the user.
+- After changing specs on `cursor/product-artifacts`, merge `cursor/product-artifacts` into the implementation branch before saving components, tests, and other non-spec work.
+- If the current branch is not `cursor/product-artifacts`, use the current branch as the implementation branch.
+- If the current branch is `cursor/product-artifacts`, ask the user which branch should receive code, implementation, and test commits.
+- Stage explicit paths only; do not use `git add .` for split commits.
+
 ## 5) Prompt template for implementation tasks
 
 ```text
@@ -179,4 +200,5 @@ Acceptance:
 
 | Date | Author | Summary |
 |------|--------|---------|
+| 2026-06-15 | Product/Architecture | Added product artifacts commit split agent and skill |
 | 2026-06-14 | Product/Architecture | Initial AI operating model |
