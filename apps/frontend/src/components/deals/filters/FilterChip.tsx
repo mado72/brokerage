@@ -1,14 +1,20 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../../../../theme/colors";
 
 type FilterChipProps = {
   label: string;
   isActive: boolean;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 export function FilterChip({ label, isActive, onPress }: FilterChipProps) {
+  const content = <Text style={[styles.text, isActive && styles.activeText]}>{label}</Text>;
+
+  if (!onPress) {
+    return <View style={[styles.chip, isActive && styles.activeChip]}>{content}</View>;
+  }
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -16,7 +22,7 @@ export function FilterChip({ label, isActive, onPress }: FilterChipProps) {
       onPress={onPress}
       style={[styles.chip, isActive && styles.activeChip]}
     >
-      <Text style={[styles.text, isActive && styles.activeText]}>{label}</Text>
+      {content}
     </Pressable>
   );
 }

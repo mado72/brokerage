@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -6,13 +7,13 @@ import { ActiveDealCard } from "../components/deals/ActiveDealCard";
 import { AssetTypeFilter } from "../components/deals/filters/AssetTypeFilter";
 import { DateRangeFilter } from "../components/deals/filters/DateRangeFilter";
 import { PartnerFilter } from "../components/deals/filters/PartnerFilter";
+import { StatusFilter } from "../components/deals/filters/StatusFilter";
 import { MetricCard } from "../components/deals/MetricCard";
 import { useActiveDealFilters } from "../hooks/useActiveDealFilters";
 import { useActiveDeals } from "../hooks/useActiveDeals";
 
-const statusFilters = ["Todos", "Com interesse", "Com proposta", "Com comissão", "Sem retorno", "Capacidade disponível"];
-
 export function ActiveDealsScreen() {
+  const [areAdvancedFiltersVisible, setAreAdvancedFiltersVisible] = useState(false);
   const { deals, metrics, isLoading, error } = useActiveDeals();
   const {
     assetTypeOptions,
@@ -23,6 +24,7 @@ export function ActiveDealsScreen() {
     resetFilters,
     updateFilters
   } = useActiveDealFilters(deals);
+  const advancedFiltersLabel = areAdvancedFiltersVisible ? "Ocultar filtros" : "Mostrar filtros";
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -42,31 +44,43 @@ export function ActiveDealsScreen() {
         </View>
 
         <View style={styles.controls}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>
-            {statusFilters.map((filter, index) => (
-              <View key={filter} style={[styles.filterChip, index === 0 && styles.activeFilterChip]}>
-                <Text style={[styles.filterText, index === 0 && styles.activeFilterText]}>{filter}</Text>
-              </View>
-            ))}
-          </ScrollView>
-          <View style={styles.advancedFilters}>
-            <AssetTypeFilter
-              options={assetTypeOptions}
-              value={filters.assetType}
-              onChange={(assetType) => updateFilters({ assetType })}
-            />
-            <PartnerFilter
-              options={partnerOptions}
-              value={filters.partnerId}
-              onChange={(partnerId) => updateFilters({ partnerId })}
-            />
-            <DateRangeFilter
-              startDate={filters.startDate}
-              endDate={filters.endDate}
-              onStartDateChange={(startDate) => updateFilters({ startDate })}
-              onEndDateChange={(endDate) => updateFilters({ endDate })}
-            />
-          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ expanded: areAdvancedFiltersVisible }}
+            onPress={() => setAreAdvancedFiltersVisible((isVisible) => !isVisible)}
+            style={styles.filtersToggle}
+          >
+            <View>
+              <Text style={styles.filtersToggleLabel}>Filtros avançados</Text>
+              <Text style={styles.filtersToggleHint}>
+                {hasActiveFilters ? "Filtros aplicados na lista" : "Refine por ativo, parceiro ou data"}
+              </Text>
+            </View>
+            <Text style={styles.filtersToggleAction}>
+              {advancedFiltersLabel}
+            </Text>
+          </Pressable>
+          {areAdvancedFiltersVisible ? (
+            <View style={styles.advancedFilters}>
+              <StatusFilter />
+              <AssetTypeFilter
+                options={assetTypeOptions}
+                value={filters.assetType}
+                onChange={(assetType) => updateFilters({ assetType })}
+              />
+              <PartnerFilter
+                options={partnerOptions}
+                value={filters.partnerId}
+                onChange={(partnerId) => updateFilters({ partnerId })}
+              />
+              <DateRangeFilter
+                startDate={filters.startDate}
+                endDate={filters.endDate}
+                onStartDateChange={(startDate) => updateFilters({ startDate })}
+                onEndDateChange={(endDate) => updateFilters({ endDate })}
+              />
+            </View>
+          ) : null}
           <View style={styles.controlFooter}>
             <Text style={styles.sortLabel}>
               Ordenação: Mais recentes | Exibindo {filteredDeals.length} de {deals.length}
@@ -165,6 +179,36 @@ const styles = StyleSheet.create({
   controls: {
     gap: 12
   },
+  filtersToggle: {
+    alignItems: "center",
+    backgroundColor: colors.surface,
+    borderColor: colors.borderSoft,
+    borderRadius: 18,
+    borderWidth: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "space-between",
+    minHeight: 56,
+    paddingHorizontal: 14,
+    paddingVertical: 12
+  },
+  filtersToggleLabel: {
+    color: colors.textCharcoal,
+    fontSize: 14,
+    fontWeight: "700"
+  },
+  filtersToggleHint: {
+    color: colors.textMutedBrown,
+    fontSize: 12,
+    lineHeight: 17,
+    marginTop: 3
+  },
+  filtersToggleAction: {
+    color: colors.textCharcoal,
+    fontSize: 13,
+    fontWeight: "700"
+  },
   advancedFilters: {
     gap: 14
   },
@@ -174,29 +218,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 10,
     justifyContent: "space-between"
-  },
-  filterRow: {
-    gap: 8,
-    paddingRight: 4
-  },
-  filterChip: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderSoft,
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 9
-  },
-  activeFilterChip: {
-    backgroundColor: colors.accentSand
-  },
-  filterText: {
-    color: colors.textMutedBrown,
-    fontSize: 13,
-    fontWeight: "600"
-  },
-  activeFilterText: {
-    color: colors.textCharcoal
   },
   sortLabel: {
     color: colors.textMutedBrown,
