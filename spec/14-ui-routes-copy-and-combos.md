@@ -54,10 +54,53 @@ Rules:
 |---------|------|
 | Title | Início |
 | Subtitle | Acompanhe ativos, prospecções, negociações e follow-ups do escritório. |
+| Active deals title | Negócios ativos |
+| Active deals subtitle | Acompanhe ativos, parceiros prospectados, condições comerciais e comissões em andamento. |
 | KPI: active assets | Ativos ativos |
 | KPI: overdue follow-ups | Follow-ups vencidos |
 | KPI: reserved capacity | Capacidade alocada |
 | KPI: stalled negotiations | Negociações paradas |
+
+### Active deals
+
+The first authenticated screen uses the Dashboard route (`/`) as an operational list of active asset-centered deals. Each item follows the List / Browse card pattern and groups the asset, disclosing partner, commercial terms, commission summary, contacted partners, and next recommended partners.
+
+| Element | Text |
+|---------|------|
+| Section title | Negócios ativos |
+| Empty state | Nenhum negócio ativo encontrado. |
+| Primary action | Cadastrar ativo |
+| Retry action | Tentar novamente |
+| Restricted disclosing partner | Informação restrita |
+| Contacted group | Prospectados |
+| Recommendations group | Recomendados para próxima abordagem |
+| Prospecting status: prospected | Prospectado |
+| Prospecting status: interested | Com interesse |
+| Prospecting status: no response | Sem retorno |
+| Prospecting status: converted | Convertido |
+| Prospecting status: not prospected | Não prospectado |
+| Commercial fallback | Condições comerciais pendentes |
+| Commission fallback | Comissão pendente |
+| Commission proposed | Proposta |
+| Commission agreed | Acordada |
+| Sort: recent | Mais recentes |
+| Sort: gross value | Maior valor bruto |
+| Sort: follow-up | Próximo follow-up |
+| Sort: activity | Maior atividade |
+| Filter: all | Todos |
+| Filter: with interest | Com interesse |
+| Filter: with proposal | Com proposta |
+| Filter: with commission | Com comissão |
+| Filter: no response | Sem retorno |
+| Filter: capacity available | Capacidade disponível |
+| Filter label: asset type | Tipo de ativo |
+| Filter label: partner | Parceiro |
+| Filter label: start date | Data inicial |
+| Filter label: end date | Data final |
+| Filter option: all asset types | Todos os tipos |
+| Filter option: all partners | Todos os parceiros |
+| Filter action: clear | Limpar filtros |
+| Filtered empty state | Nenhum negócio encontrado com os filtros selecionados. |
 
 ### Asset hub
 
