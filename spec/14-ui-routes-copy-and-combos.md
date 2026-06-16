@@ -93,6 +93,14 @@ The first authenticated screen uses the Dashboard route (`/`) as an operational 
 | Filter: with commission | Com comissão |
 | Filter: no response | Sem retorno |
 | Filter: capacity available | Capacidade disponível |
+| Filter label: asset type | Tipo de ativo |
+| Filter label: partner | Parceiro |
+| Filter label: start date | Data inicial |
+| Filter label: end date | Data final |
+| Filter option: all asset types | Todos os tipos |
+| Filter option: all partners | Todos os parceiros |
+| Filter action: clear | Limpar filtros |
+| Filtered empty state | Nenhum negócio encontrado com os filtros selecionados. |
 
 ### Asset hub
 
