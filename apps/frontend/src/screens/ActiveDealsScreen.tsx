@@ -1,15 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../../theme/colors";
 import { ActiveDealCard } from "../components/deals/ActiveDealCard";
+import { AssetTypeFilter } from "../components/deals/filters/AssetTypeFilter";
+import { DateRangeFilter } from "../components/deals/filters/DateRangeFilter";
+import { PartnerFilter } from "../components/deals/filters/PartnerFilter";
 import { MetricCard } from "../components/deals/MetricCard";
+import { useActiveDealFilters } from "../hooks/useActiveDealFilters";
 import { useActiveDeals } from "../hooks/useActiveDeals";
 
-const filters = ["Todos", "Com interesse", "Com proposta", "Com comissão", "Sem retorno", "Capacidade disponível"];
+const statusFilters = ["Todos", "Com interesse", "Com proposta", "Com comissão", "Sem retorno", "Capacidade disponível"];
 
 export function ActiveDealsScreen() {
   const { deals, metrics, isLoading, error } = useActiveDeals();
+  const {
+    assetTypeOptions,
+    filteredDeals,
+    filters,
+    hasActiveFilters,
+    partnerOptions,
+    resetFilters,
+    updateFilters
+  } = useActiveDealFilters(deals);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -30,13 +43,40 @@ export function ActiveDealsScreen() {
 
         <View style={styles.controls}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>
-            {filters.map((filter, index) => (
+            {statusFilters.map((filter, index) => (
               <View key={filter} style={[styles.filterChip, index === 0 && styles.activeFilterChip]}>
                 <Text style={[styles.filterText, index === 0 && styles.activeFilterText]}>{filter}</Text>
               </View>
             ))}
           </ScrollView>
-          <Text style={styles.sortLabel}>Ordenação: Mais recentes</Text>
+          <View style={styles.advancedFilters}>
+            <AssetTypeFilter
+              options={assetTypeOptions}
+              value={filters.assetType}
+              onChange={(assetType) => updateFilters({ assetType })}
+            />
+            <PartnerFilter
+              options={partnerOptions}
+              value={filters.partnerId}
+              onChange={(partnerId) => updateFilters({ partnerId })}
+            />
+            <DateRangeFilter
+              startDate={filters.startDate}
+              endDate={filters.endDate}
+              onStartDateChange={(startDate) => updateFilters({ startDate })}
+              onEndDateChange={(endDate) => updateFilters({ endDate })}
+            />
+          </View>
+          <View style={styles.controlFooter}>
+            <Text style={styles.sortLabel}>
+              Ordenação: Mais recentes | Exibindo {filteredDeals.length} de {deals.length}
+            </Text>
+            {hasActiveFilters ? (
+              <Pressable accessibilityRole="button" onPress={resetFilters} style={styles.clearFiltersButton}>
+                <Text style={styles.clearFiltersText}>Limpar filtros</Text>
+              </Pressable>
+            ) : null}
+          </View>
         </View>
 
         {isLoading ? (
@@ -62,9 +102,19 @@ export function ActiveDealsScreen() {
           </View>
         ) : null}
 
-        {!isLoading && !error && deals.length > 0 ? (
+        {!isLoading && !error && deals.length > 0 && filteredDeals.length === 0 ? (
+          <View style={styles.stateCard}>
+            <Text style={styles.stateTitle}>Nenhum negócio encontrado com os filtros selecionados.</Text>
+            <Text style={styles.stateText}>Ajuste os filtros para ampliar a lista de negócios ativos.</Text>
+            <Pressable accessibilityRole="button" onPress={resetFilters}>
+              <Text style={styles.stateAction}>Limpar filtros</Text>
+            </Pressable>
+          </View>
+        ) : null}
+
+        {!isLoading && !error && filteredDeals.length > 0 ? (
           <View style={styles.dealList}>
-            {deals.map((deal) => (
+            {filteredDeals.map((deal) => (
               <ActiveDealCard key={deal.asset.id} deal={deal} />
             ))}
           </View>
@@ -115,6 +165,16 @@ const styles = StyleSheet.create({
   controls: {
     gap: 12
   },
+  advancedFilters: {
+    gap: 14
+  },
+  controlFooter: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "space-between"
+  },
   filterRow: {
     gap: 8,
     paddingRight: 4
@@ -142,6 +202,20 @@ const styles = StyleSheet.create({
     color: colors.textMutedBrown,
     fontSize: 13,
     fontWeight: "600"
+  },
+  clearFiltersButton: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderSoft,
+    borderRadius: 999,
+    borderWidth: 1,
+    minHeight: 40,
+    paddingHorizontal: 13,
+    paddingVertical: 9
+  },
+  clearFiltersText: {
+    color: colors.textCharcoal,
+    fontSize: 13,
+    fontWeight: "700"
   },
   stateCard: {
     backgroundColor: colors.surface,
